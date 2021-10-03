@@ -1,21 +1,32 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory, Redirect } from "react-router-dom";
 import { Form, Input, Button, InputNumber, Typography, Divider } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
+import { useHideMenu } from "../hooks/useHideMenu";
+import { getUserStorage } from "../helpers/getUserStorage";
 
 const { Title, Text } = Typography;
 
 export const Enter = () => {
   const history = useHistory();
+  const [user] = useState(getUserStorage);
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  useHideMenu(false);
+
+  const onFinish = ({ agent, desk }) => {
+    localStorage.setItem("agent", agent);
+    localStorage.setItem("desk", desk);
+
     history.push("/desk");
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  if (user.agent && user.desk) {
+    return <Redirect to="/desk" />;
+  }
 
   return (
     <>
@@ -39,7 +50,7 @@ export const Enter = () => {
       >
         <Form.Item
           label="Agent Name"
-          name="Agent"
+          name="agent"
           rules={[
             {
               required: true,

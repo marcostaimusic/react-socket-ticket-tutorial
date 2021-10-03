@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useContext } from "react";
+import { UIContext } from "../context/UIcontext";
 import { Layout, Menu } from "antd";
 import {
   UserOutlined,
@@ -23,23 +23,49 @@ import { Desk } from "./Desk";
 const { Sider, Content } = Layout;
 
 export const RouterPage = () => {
+  const { hideMenu } = useContext(UIContext);
+
   return (
     <Router>
       <Layout style={{ height: "100vh" }}>
-        <Sider collapsedWidth="0" breakpoint="md">
+        <Sider collapsedWidth="0" breakpoint="md" hidden={hideMenu}>
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              <Link to="/enter">Enter</Link>
-            </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              <Link to="/queue">Queue</Link>
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              <Link to="/create-ticket">Create Ticket</Link>
-            </Menu.Item>
-          </Menu>
+          <Switch>
+            <Route path="/enter">
+              <Menu theme="dark" mode="inline" defaultSelectedKeys={["2"]}>
+                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                  <Link to="/queue">Queue</Link>
+                </Menu.Item>
+                <Menu.Item key="3" icon={<UploadOutlined />}>
+                  <Link to="/create-ticket">Create Ticket</Link>
+                </Menu.Item>
+              </Menu>
+            </Route>
+            <Route path="/queue">
+              <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+                <Menu.Item key="1" icon={<UserOutlined />}>
+                  <Link to="/enter">Enter</Link>
+                </Menu.Item>
+
+                <Menu.Item key="3" icon={<UploadOutlined />}>
+                  <Link to="/create-ticket">Create Ticket</Link>
+                </Menu.Item>
+              </Menu>
+            </Route>
+
+            <Route path="/create-ticket">
+              <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+                <Menu.Item key="1" icon={<UserOutlined />}>
+                  <Link to="/enter">Enter</Link>
+                </Menu.Item>
+                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                  <Link to="/queue">Queue</Link>
+                </Menu.Item>
+              </Menu>
+            </Route>
+          </Switch>
         </Sider>
+
         <Layout className="site-layout">
           <Content
             className="site-layout-background"
@@ -62,3 +88,6 @@ export const RouterPage = () => {
     </Router>
   );
 };
+
+{
+}
