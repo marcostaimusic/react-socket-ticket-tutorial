@@ -1,31 +1,26 @@
-
+const Ticket = require("./ticket");
+const TickeList = require("./ticketList");
 
 class Sockets {
+  constructor(io) {
+    this.io = io;
+    this.ticketList = new TickeList();
 
-    constructor( io ) {
+    this.socketEvents();
+  }
 
-        this.io = io;
+  socketEvents() {
+    // On connection
+    this.io.on("connection", (socket) => {
+      console.log("client connected");
 
-        this.socketEvents();
-    }
-
-    socketEvents() {
-        // On connection
-        this.io.on('connection', ( socket ) => {
-
-            // Escuchar evento: mensaje-to-server
-            socket.on('mensaje-to-server', ( data ) => {
-                console.log( data );
-                
-                this.io.emit('mensaje-from-server', data );
-            });
-            
-        
-        });
-    }
-
-
+      // Escuchar evento: mensaje-to-server
+      socket.on("newTicket", (data, callback) => {
+        const newTicket = this.ticketList.createTicket();
+        callback(newTicket);
+      });
+    });
+  }
 }
-
 
 module.exports = Sockets;
