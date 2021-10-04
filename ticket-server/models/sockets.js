@@ -19,6 +19,12 @@ class Sockets {
         const newTicket = this.ticketList.createTicket();
         callback(newTicket);
       });
+
+      socket.on("nextTicket", ({ agent, desk }, callback) => {
+        const yourTicket = this.ticketList.assignTicket(agent, desk);
+        callback(yourTicket);
+        this.io.emit("newTicketAssigned", this.ticketList.last13); //ricordati che è un getter e quindi niente parentesi
+      });
     });
   }
 }
